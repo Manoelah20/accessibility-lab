@@ -46,66 +46,69 @@ export default function Home() {
     (violation) => violation.impact === "minor",
   ).length;
 
-  function getCategory(violation: Violation): string {
-    const tags = violation.tags.map((tag) => tag.toLowerCase());
+function getCategory(violation: Violation): string {
+  const tags = violation.tags.map((tag) => tag.toLowerCase());
 
-    if (
-      tags.some(
-        (tag) =>
-          tag.includes("perceivable") ||
-          tag.includes("non-text-content") ||
-          tag.includes("text-alternatives") ||
-          tag.includes("text-alternatives") ||
-          tag.includes("contrast") ||
-          tag.includes("adaptable") ||
-          tag.includes("images"),
-      )
-    ) {
-      return "Perceptível";
-    }
-
-    if (
-      tags.some(
-        (tag) =>
-          tag.includes("operable") ||
-          tag.includes("keyboard") ||
-          tag.includes("navigation") ||
-          tag.includes("timing") ||
-          tag.includes("focus"),
-      )
-    ) {
-      return "Operável";
-    }
-
-    if (
-      tags.some(
-        (tag) =>
-          tag.includes("understandable") ||
-          tag.includes("language") ||
-          tag.includes("predictable") ||
-          tag.includes("input"),
-      )
-    ) {
-      return "Compreensível";
-    }
-
-    if (
-      tags.some(
-        (tag) =>
-          tag.includes("robust") ||
-          tag.includes("name-role-value") ||
-          tag.includes("aria"),
-      )
-    ) {
-      return "Robusto";
-    }
-
-    if (tags.some((tag) => tag.startsWith("best-practice"))) {
-      return "Boas práticas";
-    }
-
-    return "Outros";
+  // Boas práticas têm prioridade sobre outras categorias.
+  if (tags.some((tag) => tag.startsWith("best-practice"))) {
+    return "Boas práticas";
   }
+
+  // Perceptível
+  if (
+    tags.some(
+      (tag) =>
+        tag.includes("perceivable") ||
+        tag.includes("non-text-content") ||
+        tag.includes("text-alternatives") ||
+        tag.includes("contrast") ||
+        tag.includes("adaptable"),
+    )
+  ) {
+    return "Perceptível";
+  }
+
+  // Operável
+  if (
+    tags.some(
+      (tag) =>
+        tag.includes("operable") ||
+        tag.includes("keyboard") ||
+        tag.includes("navigation") ||
+        tag.includes("timing") ||
+        tag.includes("focus"),
+    )
+  ) {
+    return "Operável";
+  }
+
+  // Compreensível
+  if (
+    tags.some(
+      (tag) =>
+        tag.includes("understandable") ||
+        tag.includes("language") ||
+        tag.includes("predictable") ||
+        tag.includes("input"),
+    )
+  ) {
+    return "Compreensível";
+  }
+
+  // Robusto
+  if (
+    tags.some(
+      (tag) =>
+        tag.includes("robust") ||
+        tag.includes("name-role-value") ||
+        tag.includes("aria"),
+    )
+  ) {
+    return "Robusto";
+  }
+
+  return "Outros";
+}
 
   function getCategoryDescription(category: string): string {
     switch (category) {
@@ -128,6 +131,68 @@ export default function Home() {
         return "Outros problemas identificados pela análise automatizada.";
     }
   }
+
+  function getWcagCriteria(tags: string[]): string[] {
+  return tags
+    .filter((tag) => /^wcag\d+$/.test(tag))
+    .map((tag) => {
+      const number = tag.replace("wcag", "");
+
+      if (number === "111") {
+        return "WCAG 1.1.1 — Conteúdo não textual";
+      }
+
+      if (number === "121") {
+        return "WCAG 1.2.1 — Apenas áudio e apenas vídeo";
+      }
+
+      if (number === "131") {
+        return "WCAG 1.3.1 — Informações e relações";
+      }
+
+      if (number === "132") {
+        return "WCAG 1.3.2 — Sequência com significado";
+      }
+
+      if (number === "141") {
+        return "WCAG 1.4.1 — Uso da cor";
+      }
+
+      if (number === "143") {
+        return "WCAG 1.4.3 — Contraste mínimo";
+      }
+
+      if (number === "211") {
+        return "WCAG 2.1.1 — Teclado";
+      }
+
+      if (number === "212") {
+        return "WCAG 2.1.2 — Sem bloqueio de teclado";
+      }
+
+      if (number === "241") {
+        return "WCAG 2.4.1 — Ignorar blocos";
+      }
+
+      if (number === "242") {
+        return "WCAG 2.4.2 — Título da página";
+      }
+
+      if (number === "243") {
+        return "WCAG 2.4.3 — Ordem do foco";
+      }
+
+      if (number === "244") {
+        return "WCAG 2.4.4 — Finalidade do link";
+      }
+
+      if (number === "412") {
+        return "WCAG 4.1.2 — Nome, função e valor";
+      }
+
+      return `WCAG ${number} — Critério relacionado`;
+    });
+}
 
   function getImpactClasses(impact: Violation["impact"]): string {
     switch (impact) {
@@ -444,15 +509,65 @@ export default function Home() {
                                 </span>
                               </div>
 
-                              <div className="mt-5">
-                                <p className="text-sm font-semibold text-[var(--foreground)]">
-                                  Descrição
-                                </p>
+  <div className="mt-5">
+  <div className="flex flex-wrap items-center gap-2">
+    <span className="text-sm font-semibold text-[var(--foreground)]">
+      Categoria:
+    </span>
 
-                                <p className="mt-1 text-sm leading-6 text-[var(--text-muted)]">
-                                  {violation.description}
-                                </p>
-                              </div>
+    <span className="rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-1 text-xs font-medium text-[var(--text-muted)]">
+      {getCategory(violation)}
+    </span>
+  </div>
+
+  {violation.tags.length > 0 && (
+    <div className="mt-3">
+      <p className="text-sm font-semibold text-[var(--foreground)]">
+        Tags
+      </p>
+      
+<div className="mt-2 flex flex-wrap gap-2">
+  {violation.tags.map((tag) => (
+    <span
+      key={tag}
+      className="inline-flex rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-2.5 py-1 text-xs font-medium text-[var(--text-muted)]"
+    >
+      {tag}
+    </span>
+  ))}
+</div> 
+    </div>
+  )}
+
+{getWcagCriteria(violation.tags).length > 0 && (
+  <div className="mt-4">
+    <p className="text-sm font-semibold text-[var(--foreground)]">
+      Critérios WCAG relacionados
+    </p>
+
+    <div className="mt-2 space-y-2">
+      {getWcagCriteria(violation.tags).map((criterion) => (
+        <div
+          key={criterion}
+          className="rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-2 text-sm text-[var(--text-muted)]"
+        >
+          {criterion}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+  <div className="mt-5">
+    <p className="text-sm font-semibold text-[var(--foreground)]">
+      Descrição
+    </p>
+
+    <p className="mt-1 text-sm leading-6 text-[var(--text-muted)]">
+      {violation.description}
+    </p>
+  </div>
+</div>                                
 
                               {violation.nodes.map((node, index) => (
                                 <div
