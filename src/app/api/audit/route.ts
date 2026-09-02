@@ -27,28 +27,28 @@ export async function POST(request: Request) {
 
     const hostname = parsedUrl.hostname;
 
-const isLocalOrPrivate =
-  hostname === "localhost" ||
-  hostname === "127.0.0.1" ||
-  hostname === "0.0.0.0" ||
-  hostname === "::1" ||
-  hostname.startsWith("10.") ||
-  hostname.startsWith("192.168.") ||
-/^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname);
+    const isLocalOrPrivate =
+      hostname === "localhost" ||
+      hostname === "127.0.0.1" ||
+      hostname === "0.0.0.0" ||
+      hostname === "::1" ||
+      hostname.startsWith("10.") ||
+      hostname.startsWith("192.168.") ||
+      /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname);
 
-const isTestPage =
-  hostname === "localhost" &&
-  parsedUrl.port === "3000" &&
-  parsedUrl.pathname === "/test-page";
+    const isTestPage =
+      hostname === "localhost" &&
+      parsedUrl.port === "3000" &&
+      parsedUrl.pathname === "/test-page";
 
-if (isLocalOrPrivate && !isTestPage) {
-  return NextResponse.json(
-    {
-      error: "Não é permitido analisar endereços locais ou privados.",
-    },
-    { status: 400 },
-  );
-}
+    if (isLocalOrPrivate && !isTestPage) {
+      return NextResponse.json(
+        {
+          error: "Não é permitido analisar endereços locais ou privados.",
+        },
+        { status: 400 },
+      );
+    }
 
     browser = await chromium.launch({
       headless: true,
@@ -74,7 +74,7 @@ if (isLocalOrPrivate && !isTestPage) {
       title,
       violations: results.violations,
     });
-  } catch {
+  } catch (error) {
     return NextResponse.json(
       {
         error: "Não foi possível analisar essa página.",

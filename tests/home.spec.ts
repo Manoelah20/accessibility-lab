@@ -42,9 +42,14 @@ test.describe("Accessibility Lab - acessibilidade", () => {
   test("mensagem de carregamento deve ser anunciada para tecnologias assistivas", async ({
     page,
   }) => {
+    await page.route("**/api/audit", async () => {
+      await new Promise(() => {});
+    });
+
     await page.goto("/");
 
     const urlInput = page.getByLabel("URL da página");
+
     const submitButton = page.getByRole("button", {
       name: "Analisar página",
     });
@@ -54,7 +59,13 @@ test.describe("Accessibility Lab - acessibilidade", () => {
 
     const statusMessage = page.getByRole("status");
 
-    await expect(statusMessage).toContainText("Enviando...");
+    const loadingButton = page.getByRole("button", {
+      name: "Analisando...",
+    });
+
+    await expect(statusMessage).toContainText("Analisando...");
+    await expect(loadingButton).toBeDisabled();
+    await expect(urlInput).toBeDisabled();
   });
 
   test("mensagem de erro deve ser anunciada para tecnologias assistivas", async ({
@@ -73,6 +84,7 @@ test.describe("Accessibility Lab - acessibilidade", () => {
     await page.goto("/");
 
     const urlInput = page.getByLabel("URL da página");
+
     const submitButton = page.getByRole("button", {
       name: "Analisar página",
     });
@@ -82,6 +94,7 @@ test.describe("Accessibility Lab - acessibilidade", () => {
 
     const errorMessage = page.getByText("URL inválida para análise.");
 
-    await expect(errorMessage).toContainText("URL inválida para análise.");
+    await expect(errorMessage).toBeVisible();
   });
 });
+
