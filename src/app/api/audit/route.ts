@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { chromium } from "playwright";
 import AxeBuilder from "@axe-core/playwright";
+import { calculateAccessibilityScore } from "@/lib/audit-utils";
 
 export async function POST(request: Request) {
   let browser;
@@ -16,7 +17,15 @@ export async function POST(request: Request) {
       );
     }
 
-    const parsedUrl = new URL(url);
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(url);
+    } catch {
+      return NextResponse.json(
+        { error: "Não foi possível analisar essa página." },
+        { status: 400 },
+      );
+    }
 
     if (!["http:", "https:"].includes(parsedUrl.protocol)) {
       return NextResponse.json(
@@ -38,8 +47,10 @@ export async function POST(request: Request) {
 
     const isTestPage =
       hostname === "localhost" &&
-      parsedUrl.port === "3000" &&
-      parsedUrl.pathname === "/test-page";
+      (parsedUrl.port === "3000" || parsedUrl.port === "" || !parsedUrl.port) &&
+      (parsedUrl.pathname === "/test-page" ||
+        parsedUrl.pathname === "/test-page-ok" ||
+        parsedUrl.pathname.startsWith("/test-page"));
 
     if (isLocalOrPrivate && !isTestPage) {
       return NextResponse.json(
@@ -68,13 +79,20 @@ export async function POST(request: Request) {
       page,
     }).analyze();
 
+    const score = calculateAccessibilityScore(results.violations);
+
     return NextResponse.json({
       message: "Auditoria concluída.",
       url,
-      title,
+      title: title || "Página sem título",
       violations: results.violations,
+      passesCount: results.passes ? results.passes.length : 0,
+      incompleteCount: results.incomplete ? results.incomplete.length : 0,
+      inapplicableCount: results.inapplicable ? results.inapplicable.length : 0,
+      score,
+      timestamp: new Date().toISOString(),
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       {
         error: "Não foi possível analisar essa página.",

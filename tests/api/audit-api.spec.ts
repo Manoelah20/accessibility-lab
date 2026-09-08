@@ -55,6 +55,8 @@ test.describe("API de auditoria", () => {
 
     expect(response.status()).toBe(200);
     expect(data.message).toBe("Auditoria concluída.");
+    expect(typeof data.score).toBe("number");
+    expect(data.violations.length).toBeGreaterThan(0);
 
     const imageViolation = data.violations.find(
       (violation: { id: string }) => violation.id === "image-alt",
@@ -64,7 +66,24 @@ test.describe("API de auditoria", () => {
     expect(imageViolation.impact).toBe("critical");
   });
 
-  test("deve rejeitar acesso a endereço local", async ({ request }) => {
+  test("deve auditar com sucesso a página de teste sem violações (/test-page-ok)", async ({
+    request,
+  }) => {
+    const response = await request.post("/api/audit", {
+      data: {
+        url: "http://localhost:3000/test-page-ok",
+      },
+    });
+
+    const data = await response.json();
+
+    expect(response.status()).toBe(200);
+    expect(data.message).toBe("Auditoria concluída.");
+    expect(data.violations).toEqual([]);
+    expect(data.score).toBe(100);
+  });
+
+  test("deve rejeitar acesso a endereço local não autorizado", async ({ request }) => {
     const response = await request.post("/api/audit", {
       data: {
         url: "http://127.0.0.1:3000/test-page",
