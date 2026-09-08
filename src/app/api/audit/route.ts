@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
-import { chromium } from "playwright";
+import chromium from "@sparticuz/chromium";
+import { chromium as playwright } from "playwright-core";
 import AxeBuilder from "@axe-core/playwright";
 import { calculateAccessibilityScore } from "@/lib/audit-utils";
+
+export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   let browser;
@@ -18,6 +21,7 @@ export async function POST(request: Request) {
     }
 
     let parsedUrl: URL;
+
     try {
       parsedUrl = new URL(url);
     } catch {
@@ -47,7 +51,9 @@ export async function POST(request: Request) {
 
     const isTestPage =
       hostname === "localhost" &&
-      (parsedUrl.port === "3000" || parsedUrl.port === "" || !parsedUrl.port) &&
+      (parsedUrl.port === "3000" ||
+        parsedUrl.port === "" ||
+        !parsedUrl.port) &&
       (parsedUrl.pathname === "/test-page" ||
         parsedUrl.pathname === "/test-page-ok" ||
         parsedUrl.pathname.startsWith("/test-page"));
@@ -61,9 +67,23 @@ export async function POST(request: Request) {
       );
     }
 
-    browser = await chromium.launch({
-      headless: true,
-    });
+    const isVercel = process.env.VERCEL === "1";
+
+    if (isVercel) {
+      const executablePath = await chromium.executablePath();
+
+      browser = await playwright.launch({
+        args: chromium.args,
+        executablePath,
+        headless: true,
+      });
+    } else {
+      const { chromium: localChromium } = await import("playwright");
+
+      browser = await localChromium.launch({
+        headless: true,
+      });
+    }
 
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -88,16 +108,20 @@ export async function POST(request: Request) {
       violations: results.violations,
       passesCount: results.passes ? results.passes.length : 0,
       incompleteCount: results.incomplete ? results.incomplete.length : 0,
-      inapplicableCount: results.inapplicable ? results.inapplicable.length : 0,
+      inapplicableCount: results.inapplicable
+        ? results.inapplicable.length
+        : 0,
       score,
       timestamp: new Date().toISOString(),
     });
-  } catch {
+  } catch (error) {
+    console.error("ERRO NA AUDITORIA:", error);
+
     return NextResponse.json(
       {
         error: "Não foi possível analisar essa página.",
       },
-      { status: 400 },
+      { status: 500 },
     );
   } finally {
     if (browser) {
