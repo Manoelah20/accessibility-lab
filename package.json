@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "playwright test"
   },
   "dependencies": {
     "@axe-core/playwright": "^4.13.0",
