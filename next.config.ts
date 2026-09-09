@@ -9,6 +9,13 @@ const nextConfig: NextConfig = {
     "axe-core",
     "@sparticuz/chromium",
   ],
+
+  outputFileTracingIncludes: {
+    "/api/audit": [
+      "./node_modules/playwright-core/**/*",
+      "./node_modules/@sparticuz/chromium/**/*",
+    ],
+  },
 };
 
 export default nextConfig;

@@ -117,9 +117,12 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("ERRO NA AUDITORIA:", error);
 
+    const errorMessage =
+      error instanceof Error ? error.message : "Erro inesperado na auditoria";
+
     return NextResponse.json(
       {
-        error: "Não foi possível analisar essa página.",
+        error: errorMessage,
       },
       { status: 500 },
     );
