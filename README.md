@@ -1,182 +1,192 @@
-# 🌐 Accessibility Lab
+# Accessibility Lab
 
-> **Automated Web Accessibility Auditing with Next.js, Playwright and Axe-core**
+> **Auditoria automatizada de acessibilidade para aplicações web.**
 
-Uma aplicação web para **auditoria automatizada de acessibilidade**, análise de violações e apoio à tomada de decisão técnica.
+O **Accessibility Lab** é uma aplicação web desenvolvida para analisar páginas acessíveis por URL, identificar problemas de acessibilidade com **axe-core** e transformar os resultados em informações técnicas para investigação, priorização e correção.
 
-O **Accessibility Lab** foi desenvolvido para explorar, na prática, como ferramentas automatizadas podem identificar barreiras de acessibilidade em páginas web e transformar os resultados da auditoria em informações úteis para **análise, priorização e correção**.
+**Aplicação:** <https://accessibility-lab-orcin.vercel.app>
 
-O projeto combina **Next.js, React, TypeScript, Playwright e Axe-core**, com foco em acessibilidade web, testes automatizados, qualidade de software e experiência do usuário.
-
----
-
-## 🎯 Visão geral
-
-O objetivo do projeto não é apenas encontrar erros.
-
-A aplicação procura responder a três perguntas:
-
-**1. O que está errado?**
-Identificação das violações encontradas pelo Axe-core.
-
-**2. Qual é o impacto?**
-Classificação por nível de severidade e organização dos resultados.
-
-**3. Como corrigir?**
-Apresentação de evidências técnicas, critérios WCAG relacionados e orientações práticas de correção.
-
-Esse fluxo transforma uma auditoria automatizada em uma experiência de **análise técnica e aprendizado**.
+O projeto foi desenvolvido com foco em **Front-end moderno, acessibilidade Web, automação de testes, integração com APIs, segurança de entrada e qualidade de software**.
 
 ---
 
-## ✨ Principais funcionalidades
+## Sobre o projeto
 
-### 🔍 Auditoria automatizada
+Uma auditoria automatizada pode identificar diversos problemas de acessibilidade, mas o valor do resultado está em conseguir entender:
 
-O usuário informa a URL de uma página e a aplicação:
+* **o que foi identificado;**
+* **qual é o impacto;**
+* **quais elementos foram afetados;**
+* **qual critério ou regra está relacionado;**
+* **como investigar e corrigir o problema.**
 
-* valida o endereço informado;
-* verifica protocolo e formato da URL;
-* bloqueia determinados endereços locais e privados;
-* abre a página utilizando Playwright + Chromium;
-* executa uma auditoria com Axe-core;
-* normaliza os resultados;
-* apresenta as violações encontradas.
+O Accessibility Lab foi construído justamente para trabalhar esse fluxo.
 
----
-
-### 📊 Score de acessibilidade
-
-O Accessibility Lab possui uma métrica própria de **0 a 100** para facilitar a interpretação dos resultados.
-
-O cálculo considera:
-
-* impacto da violação;
-* quantidade de elementos afetados;
-* penalização progressiva conforme o número de ocorrências.
-
-> **Importante:** o score é uma métrica criada especificamente para este projeto. Ele **não representa um percentual oficial de conformidade com WCAG** e não substitui uma avaliação de acessibilidade.
+A aplicação recebe uma URL, abre a página em um navegador automatizado, executa o **axe-core**, processa os resultados e apresenta as violações de forma organizada.
 
 ---
 
-### 🏷️ Classificação das violações
+## Principais funcionalidades
 
-As violações são organizadas em categorias utilizadas pelo projeto:
+### Auditoria por URL
 
-* **Perceptível**
-* **Operável**
-* **Compreensível**
-* **Robusto**
-* **Boas práticas**
+O usuário informa uma URL pública e a aplicação:
 
-Quando aplicável, a aplicação também relaciona as regras identificadas aos critérios WCAG conhecidos.
+1. valida a entrada;
+2. verifica o protocolo HTTP/HTTPS;
+3. aplica regras de proteção para determinados endereços locais e privados;
+4. abre a página com Playwright;
+5. executa a auditoria com axe-core;
+6. processa os resultados;
+7. apresenta o relatório na interface.
 
----
+### Análise das violações
 
-### 🔴 Classificação por impacto
+Cada problema identificado pode apresentar:
 
-As violações são agrupadas por nível de impacto:
+* ID da regra;
+* descrição;
+* nível de impacto;
+* categoria;
+* critérios WCAG relacionados;
+* elementos afetados;
+* seletor CSS;
+* evidência retornada pelo axe-core;
+* orientação de correção;
+* documentação da regra.
 
-| Impacto     | Prioridade |
-| ----------- | ---------- |
-| 🔴 Critical | Muito alta |
-| 🟠 Serious  | Alta       |
-| 🟡 Moderate | Média      |
-| ⚪ Minor     | Baixa      |
+### Classificação por impacto
 
-A interface permite filtrar os resultados por nível de impacto.
+| Impacto  | Prioridade |
+| -------- | ---------- |
+| Critical | Muito alta |
+| Serious  | Alta       |
+| Moderate | Média      |
+| Minor    | Baixa      |
 
----
+Os resultados podem ser filtrados por nível de impacto.
 
-### 🔎 Busca e análise
+### Categorias de acessibilidade
 
-Os resultados podem ser pesquisados utilizando informações como:
+As violações são organizadas em categorias utilizadas pela aplicação:
+
+* Perceptível
+* Operável
+* Compreensível
+* Robusto
+* Boas práticas
+* Outros
+
+Quando disponível, a aplicação também apresenta a relação com critérios WCAG.
+
+### Score
+
+O projeto possui uma métrica própria de **0 a 100** para facilitar a interpretação dos resultados.
+
+A pontuação considera o impacto das violações e a quantidade de elementos afetados.
+
+> **Importante:** esse score é uma métrica criada para o Accessibility Lab. Ele não representa percentual oficial de conformidade com WCAG e não substitui uma avaliação de acessibilidade.
+
+### Busca e filtros
+
+É possível pesquisar os resultados por informações como:
 
 * ID da regra;
 * descrição;
 * tags;
 * elementos afetados;
 * seletores;
-* evidências retornadas pelo Axe-core.
+* evidências.
+
+### Exportação
+
+Os resultados podem ser:
+
+* copiados em **Markdown**;
+* exportados em **JSON**.
+
+O relatório Markdown pode ser utilizado como base para documentação técnica, abertura de issues ou acompanhamento de correções.
 
 ---
 
-### 🛠️ Orientação para correção
-
-Cada violação apresenta informações técnicas para facilitar sua investigação.
-
-Entre os dados apresentados estão:
-
-* descrição da regra;
-* impacto;
-* categoria;
-* critérios WCAG relacionados;
-* elementos afetados;
-* seletor CSS;
-* evidência da falha;
-* orientação de correção;
-* documentação técnica da regra.
-
-A proposta é aproximar o resultado automatizado de uma **ação concreta de desenvolvimento**.
-
----
-
-### 📋 Exportação dos resultados
-
-Os resultados podem ser utilizados para documentação e análise posterior.
-
-A aplicação permite:
-
-* copiar o relatório em Markdown;
-* baixar os dados da auditoria em JSON.
-
-O relatório Markdown pode servir como base para:
-
-* documentação técnica;
-* abertura de issues;
-* registro de problemas;
-* acompanhamento de correções;
-* comunicação entre desenvolvimento e QA.
-
----
-
-## 🧠 Arquitetura e fluxo técnico
+## Arquitetura
 
 O fluxo principal da aplicação é:
 
 ```text
-Usuário informa uma URL
+URL informada pelo usuário
         ↓
-Interface envia requisição para a API
+Interface
         ↓
-API valida a URL
+POST /api/audit
         ↓
-Verificação de protocolo e endereço
+Validação da URL
         ↓
-Playwright inicia o Chromium
+Proteção contra determinados endereços locais/privados
         ↓
-Página é carregada
+Playwright + Chromium
         ↓
-Axe-core executa a auditoria
+Carregamento da página
         ↓
-Resultados são normalizados
+axe-core
         ↓
-Violações são classificadas
+Resultados da auditoria
         ↓
-Score é calculado
+Classificação e cálculo do score
         ↓
-Interface apresenta os resultados
+Interface de análise
         ↓
-Usuário pode filtrar, analisar e exportar
+Filtros / detalhes / exportação
 ```
 
-A API também possui validações para impedir determinadas tentativas de análise de endereços locais ou privados.
+A aplicação utiliza o **Next.js App Router**, mantendo a execução do navegador automatizado no ambiente do servidor.
 
 ---
 
-## 🏗️ Arquitetura do projeto
+## Principais decisões técnicas
 
-O projeto utiliza o **Next.js App Router**, separando responsabilidades entre interface, API, tipos, utilitários e testes.
+### Next.js
+
+O Next.js é utilizado tanto para a interface quanto para a API responsável pela auditoria.
+
+A execução do Playwright fica concentrada no servidor, evitando colocar a automação do navegador diretamente no cliente.
+
+### Playwright
+
+O Playwright é utilizado para carregar a página real em um navegador automatizado antes da execução da auditoria.
+
+Isso permite analisar páginas públicas e aplicações web que podem ser renderizadas no navegador.
+
+### Axe-core
+
+O axe-core é o motor responsável pela identificação automatizada das violações.
+
+Os resultados são posteriormente tratados pela aplicação para apresentação, classificação e geração do relatório.
+
+### TypeScript
+
+A tipagem é utilizada entre API, utilitários e interface para representar:
+
+* resultados da auditoria;
+* violações;
+* impactos;
+* nós afetados;
+* filtros;
+* informações do relatório.
+
+### Separação da lógica
+
+A lógica de classificação, score, critérios WCAG e geração de relatório foi concentrada em:
+
+```text
+src/lib/audit-utils.ts
+```
+
+Isso mantém regras de negócio separadas dos componentes de apresentação.
+
+---
+
+## Estrutura do projeto
 
 ```text
 accessibility-lab/
@@ -214,182 +224,111 @@ accessibility-lab/
 │
 ├── tests/
 │   ├── accessibility/
-│   │   ├── audit-detection.spec.ts
-│   │   ├── axe-local.spec.ts
-│   │   └── test-page-ok.spec.ts
-│   │
 │   ├── api/
-│   │   └── audit-api.spec.ts
-│   │
 │   ├── ui/
-│   │   └── home.spec.ts
-│   │
 │   └── utils/
-│       └── score.spec.ts
 │
 ├── playwright.config.ts
 ├── package.json
 └── README.md
 ```
 
-### Principais responsabilidades
-
-| Arquivo                | Responsabilidade                                            |
-| ---------------------- | ----------------------------------------------------------- |
-| `page.tsx`             | Interface principal e execução da auditoria                 |
-| `api/audit/route.ts`   | Validação da URL e execução do Playwright + Axe-core        |
-| `audit-utils.ts`       | Classificação, critérios WCAG, score e geração de relatório |
-| `audit.ts`             | Tipagem dos resultados da auditoria                         |
-| `ViolationCard.tsx`    | Apresentação detalhada de uma violação                      |
-| `ViolationSection.tsx` | Organização das violações por categoria                     |
-| `ImpactFilters.tsx`    | Filtros e pesquisa                                          |
-| `ImpactSummary.tsx`    | Resumo dos níveis de impacto                                |
-| `AuditStatus.tsx`      | Status geral da auditoria                                   |
-| `test-page/`           | Página com problemas intencionais                           |
-| `test-page-ok/`        | Página de referência sem violações automatizadas            |
-
 ---
 
-## 🧩 Principais decisões técnicas
+## Testes automatizados
 
-### Next.js App Router
+O projeto utiliza **Playwright Test** e possui cobertura de diferentes camadas da aplicação.
 
-O projeto utiliza o App Router para separar a camada de interface da API responsável pela execução da auditoria.
+Atualmente são **30 testes automatizados** cobrindo:
 
-Isso permite manter a aplicação organizada e concentrar a execução do Playwright no ambiente do servidor.
+### Acessibilidade
 
----
+* detecção de violações intencionais;
+* execução do axe-core;
+* página com problemas;
+* página sem violações automatizadas;
+* estrutura acessível da própria interface.
 
-### Playwright + Chromium
+### API
 
-O Playwright é utilizado para abrir e analisar a página real antes da execução do Axe-core.
+* URL obrigatória;
+* URL inválida;
+* protocolo não permitido;
+* bloqueio de determinados endereços locais;
+* auditoria bem-sucedida;
+* contrato da resposta da API;
+* página sem violações;
+* score retornado.
 
-Essa abordagem permite que a auditoria aconteça em um navegador automatizado, aproximando o processo das condições de execução de uma aplicação web real.
+### Interface
 
----
-
-### Axe-core
-
-O Axe-core é responsável pela identificação automatizada das violações de acessibilidade.
-
-Os resultados retornados pelo motor são posteriormente transformados pelo projeto em uma estrutura própria para apresentação e análise.
-
----
-
-### TypeScript
-
-O projeto utiliza tipagem explícita para representar:
-
-* violações;
-* impactos;
-* resultados;
+* formulário de auditoria;
+* navegação por teclado;
+* Skip Link;
+* estados de carregamento;
+* mensagens de erro;
 * filtros;
-* nós afetados;
-* informações da auditoria.
+* pesquisa;
+* detalhes das violações;
+* score;
+* cópia do relatório;
+* download do JSON;
+* estado de auditoria aprovada.
 
-Isso ajuda a reduzir inconsistências entre a API, os utilitários e os componentes da interface.
+### Utilitários
 
----
-
-### Camada de utilitários
-
-A lógica relacionada à classificação, score, critérios WCAG e geração de relatórios foi concentrada em:
-
-```text
-src/lib/audit-utils.ts
-```
-
-Essa separação evita colocar regras de negócio diretamente nos componentes visuais.
+* cálculo do score;
+* diferentes níveis de impacto;
+* múltiplas violações;
+* múltiplos elementos afetados;
+* cenário sem violações.
 
 ---
 
-## 📊 Como o score é calculado
+## Executando localmente
 
-O score foi criado especificamente para o Accessibility Lab.
+### Pré-requisitos
 
-Cada nível de impacto possui uma penalização base:
+* Node.js
+* npm
 
-| Impacto  | Penalização base |
-| -------- | ---------------: |
-| Critical |               25 |
-| Serious  |               15 |
-| Moderate |                8 |
-| Minor    |                3 |
+### Instalação
 
-Quando uma mesma regra afeta vários elementos, a penalização aumenta progressivamente.
-
-De forma simplificada:
-
-```text
-Score inicial: 100
-        ↓
-Identificação das violações
-        ↓
-Aplicação da penalização por impacto
-        ↓
-Ajuste pela quantidade de elementos afetados
-        ↓
-Score final
+```bash
+npm install
 ```
 
-Exemplos:
+### Ambiente de desenvolvimento
 
-```text
-0 violações
-→ 100
-
-1 violação Minor
-→ 97
-
-1 violação Moderate
-→ 92
-
-1 violação Serious
-→ 85
-
-1 violação Critical
-→ 75
+```bash
+npm run dev
 ```
 
-A métrica tem como objetivo **facilitar a interpretação e priorização dos problemas**.
-
-Ela não representa conformidade oficial com WCAG.
-
----
-
-## 🧪 Testes automatizados
-
-O projeto possui uma suíte de testes utilizando **Playwright Test**.
-
-Os testes estão organizados por responsabilidade:
+A aplicação estará disponível em:
 
 ```text
-tests/
-├── accessibility/
-├── api/
-├── ui/
-└── utils/
+http://localhost:3000
 ```
 
-### Executar todos os testes
+### Testes
 
 ```bash
 npx playwright test --workers=1
 ```
 
-### Executar os testes com interface gráfica
+### Testes com interface
 
 ```bash
 npx playwright test --ui
 ```
 
-### Verificar os tipos TypeScript
+### Verificação TypeScript
 
 ```bash
 npx tsc --noEmit
 ```
 
-### Gerar o build de produção
+### Build de produção
 
 ```bash
 npm run build
@@ -397,126 +336,21 @@ npm run build
 
 ---
 
-## 🔬 O que é validado pelos testes
+## Páginas de teste
 
-A suíte cobre diferentes camadas da aplicação.
+O projeto possui duas páginas internas utilizadas para validar o comportamento da auditoria.
 
-### API
-
-* URL obrigatória;
-* protocolo HTTP/HTTPS;
-* URL inválida;
-* bloqueio de endereços locais/privados;
-* execução da auditoria;
-* identificação de violações;
-* página sem violações;
-* score retornado pela auditoria.
-
-### Acessibilidade
-
-* execução direta do Axe-core;
-* detecção de problemas conhecidos;
-* página de demonstração com violações;
-* página de demonstração sem violações.
-
-### Interface
-
-* ausência de violações automatizadas na interface principal;
-* Skip Link;
-* labels acessíveis;
-* navegação por teclado;
-* nomes acessíveis dos controles;
-* estado de carregamento;
-* mensagens de erro;
-* filtros;
-* apresentação do score;
-* apresentação dos resultados.
-
-### Utilitários
-
-* cálculo do score;
-* diferentes níveis de impacto;
-* múltiplos elementos afetados;
-* limite de penalização;
-* cenário sem violações.
-
----
-
-## ♿ Acessibilidade da própria aplicação
-
-O Accessibility Lab também foi desenvolvido considerando práticas de acessibilidade.
-
-Entre os recursos utilizados estão:
-
-* HTML semântico;
-* Skip Link;
-* foco visual;
-* navegação por teclado;
-* labels associados aos campos;
-* regiões `aria-live`;
-* mensagens de status acessíveis;
-* estados de carregamento;
-* hierarquia de títulos;
-* contraste visual;
-* nomes acessíveis para elementos interativos.
-
-A própria interface também é submetida a testes automatizados de acessibilidade.
-
-> **Importante:** a aplicação não considera que uma interface está totalmente acessível apenas porque os testes automatizados passaram.
-
----
-
-## ⚠️ Limitações da auditoria automatizada
-
-Ferramentas automatizadas são importantes, mas não conseguem identificar todos os problemas de acessibilidade.
-
-O Axe-core consegue detectar diversas barreiras conhecidas, porém alguns aspectos dependem de avaliação humana.
-
-Uma avaliação mais completa deve combinar automação com testes como:
-
-* navegação utilizando apenas teclado;
-* avaliação com leitores de tela;
-* testes de foco;
-* ampliação da interface;
-* análise da ordem de leitura;
-* avaliação de textos e instruções;
-* análise de fluxos interativos;
-* testes com diferentes contextos de uso;
-* testes com usuários.
-
-Além disso, algumas regras retornadas pelo Axe podem representar **boas práticas**, e não necessariamente uma violação direta de um critério de sucesso WCAG.
-
----
-
-## 🧪 Páginas de demonstração
-
-O projeto possui duas páginas internas para demonstrar diferentes cenários.
-
-### Página com problemas
-
-```text
-/test-page
-```
+### `/test-page`
 
 Página criada propositalmente com problemas de acessibilidade.
 
-Ela permite verificar se o sistema consegue:
+Ela contém elementos que permitem validar a detecção de violações pelo axe-core.
 
-* executar a auditoria;
-* identificar violações;
-* apresentar impacto;
-* mostrar elementos afetados;
-* fornecer orientação de correção.
+### `/test-page-ok`
 
-### Página sem violações automatizadas
+Página criada para representar um cenário sem violações automatizadas identificadas pelo axe-core.
 
-```text
-/test-page-ok
-```
-
-Página criada para representar uma implementação na qual o Axe-core não encontra violações automatizadas.
-
-Ela é utilizada para validar o comportamento esperado da aplicação quando o resultado da auditoria é:
+Esse cenário é utilizado nos testes para validar:
 
 ```text
 0 violações
@@ -525,23 +359,83 @@ Score: 100
 
 ---
 
-## 🔐 Validação de URLs
+## Acessibilidade da própria aplicação
 
-Como o sistema recebe URLs externas para análise, a API realiza validações antes de executar o navegador automatizado.
+O Accessibility Lab também considera acessibilidade na construção da própria interface.
 
-Entre elas:
+Entre as práticas utilizadas estão:
 
-* URL obrigatória;
-* protocolo HTTP ou HTTPS;
-* validação do formato;
-* rejeição de determinados endereços locais;
-* rejeição de determinados endereços privados.
+* HTML semântico;
+* Skip Link;
+* navegação por teclado;
+* foco visual;
+* labels associados aos campos;
+* regiões `aria-live`;
+* mensagens de status acessíveis;
+* estados de carregamento;
+* hierarquia de títulos;
+* nomes acessíveis para controles;
+* contraste visual.
 
-Essa camada reduz riscos relacionados à tentativa de utilizar o serviço para acessar recursos internos ou endereços que não deveriam ser analisados.
+A interface também é submetida a testes automatizados.
+
+> Passar em uma auditoria automatizada não significa que uma interface seja totalmente acessível.
 
 ---
 
-## 🚀 Tecnologias
+## Segurança da entrada
+
+Como a aplicação recebe uma URL fornecida pelo usuário e utiliza um navegador automatizado para acessá-la, a API possui uma camada específica de validação.
+
+São verificadas, entre outras condições:
+
+* existência da URL;
+* formato válido;
+* protocolo HTTP/HTTPS;
+* determinados endereços locais;
+* determinados endereços privados.
+
+Essa validação busca reduzir riscos associados ao acesso automatizado a recursos internos ou que não deveriam ser analisados.
+
+---
+
+## Limitações
+
+O Accessibility Lab realiza **auditoria automatizada de aplicações web acessíveis por URL**.
+
+Ele não substitui uma avaliação completa de acessibilidade.
+
+Alguns problemas dependem de avaliação humana e podem não ser identificados automaticamente, como:
+
+* qualidade e clareza do conteúdo;
+* ordem de leitura;
+* experiência real com leitor de tela;
+* comportamento complexo de componentes;
+* adequação dos textos e instruções;
+* experiência de navegação;
+* fluxos específicos da aplicação;
+* contexto de uso.
+
+Uma avaliação completa deve combinar automação com testes manuais e, quando possível, testes com usuários.
+
+### Escopo atual
+
+O projeto é destinado a:
+
+* páginas web públicas;
+* aplicações web;
+* SPAs;
+* aplicações React;
+* aplicações Next.js;
+* aplicações Angular;
+* aplicações Vue;
+* outras aplicações acessíveis por URL.
+
+Aplicações móveis nativas para Android ou iOS não fazem parte do escopo atual da ferramenta.
+
+---
+
+## Tecnologias
 
 ### Front-end
 
@@ -552,205 +446,55 @@ Essa camada reduz riscos relacionados à tentativa de utilizar o serviço para a
 
 ### Auditoria
 
-* Axe-core
-* `@axe-core/playwright`
+* axe-core
+* @axe-core/playwright
 * Playwright
 * Chromium
 
 ### Qualidade
 
-* TypeScript
 * Playwright Test
-* testes de acessibilidade
-* testes de API
-* testes de interface
-* testes de utilitários
-
----
-
-## 📦 Instalação
-
-### Pré-requisitos
-
-* Node.js
-* npm
-
-### 1. Clone o repositório
-
-```bash
-git clone https://github.com/Manoelah20/accessibility-lab.git
-```
-
-### 2. Acesse o projeto
-
-```bash
-cd accessibility-lab
-```
-
-### 3. Instale as dependências
-
-```bash
-npm install
-```
-
-### 4. Instale o Chromium do Playwright
-
-```bash
-npx playwright install chromium
-```
-
-### 5. Inicie o ambiente de desenvolvimento
-
-```bash
-npm run dev
-```
-
-Depois, acesse:
-
-```text
-http://localhost:3000
-```
-
----
-
-## 🔎 Executando uma auditoria
-
-Na página inicial, informe uma URL válida.
-
-Também é possível utilizar as páginas de demonstração:
-
-```text
-/test-page
-```
-
-ou:
-
-```text
-/test-page-ok
-```
-
-A primeira permite observar a identificação de problemas introduzidos propositalmente.
-
-A segunda permite validar o comportamento esperado quando nenhuma violação automatizada é encontrada.
-
----
-
-## 📈 Qualidade do projeto
-
-Antes de uma alteração ser considerada concluída, o projeto pode ser validado com:
-
-```bash
-npx tsc --noEmit
-```
-
-```bash
-npm run build
-```
-
-```bash
-npx playwright test --workers=1
-```
-
-Essas verificações ajudam a validar:
-
-* tipagem;
-* build de produção;
-* funcionamento da aplicação;
-* API;
-* interface;
-* acessibilidade;
-* regras de negócio;
-* cálculo do score.
-
----
-
-## 🎯 Objetivos de aprendizado
-
-O Accessibility Lab foi desenvolvido como um projeto prático para aprofundar conhecimentos em:
-
-* desenvolvimento Front-End;
-* Next.js;
-* React;
-* TypeScript;
-* APIs;
-* Playwright;
-* testes automatizados;
-* acessibilidade web;
-* WCAG;
-* Axe-core;
-* arquitetura de componentes;
-* análise técnica de problemas;
-* qualidade de software.
-
-O projeto também busca demonstrar uma abordagem de desenvolvimento baseada em **evidências, testes e tomada de decisão técnica**.
-
----
-
-## 💡 O que este projeto demonstra
-
-Além da implementação visual, o projeto demonstra conhecimentos em:
-
-* integração entre Front-end e API;
-* automação de navegador;
-* auditoria automatizada;
-* tratamento e normalização de resultados;
-* modelagem de dados com TypeScript;
-* criação de métricas próprias;
-* testes automatizados;
-* testes de acessibilidade;
-* organização de componentes;
-* separação de responsabilidades;
-* validação de entradas;
-* tratamento de estados de carregamento e erro;
-* documentação técnica;
-* análise e priorização de problemas de acessibilidade.
-
----
-
-## 🛣️ Roadmap
-
-Possíveis evoluções do projeto:
-
-* [ ] ampliar o mapeamento entre regras Axe e critérios WCAG;
-* [ ] adicionar checklist de testes manuais;
-* [ ] registrar histórico de auditorias;
-* [ ] comparar resultados entre auditorias;
-* [ ] adicionar diferentes tamanhos de viewport;
-* [ ] integrar auditorias a pipelines CI/CD;
-* [ ] melhorar a documentação individual das regras;
-* [ ] adicionar autenticação;
-* [ ] criar histórico por projeto;
-* [ ] disponibilizar uma versão pública da aplicação.
-
----
-
-## 📌 Status
-
-**Projeto em desenvolvimento contínuo.**
-
-O Accessibility Lab atualmente funciona como uma aplicação de demonstração e aprendizado, com foco em:
-
-**Acessibilidade Web · Automação · Testes · Next.js · TypeScript · Qualidade de Software**
-
----
-
-## 👩‍💻 Autora
-
-### Manoela Harrison
-
-**Frontend-Focused Full-Stack Developer**
-
-Foco em:
-
-* React
-* Next.js
 * TypeScript
-* Acessibilidade Web
-* Desenvolvimento de interfaces
-* Testes automatizados
+* ESLint
+
+### Deploy
+
+* Vercel
 
 ---
 
-## 📄 Licença
+## Resultado do projeto
 
-Este projeto está disponível sob a licença MIT, caso o arquivo `LICENSE` esteja presente no repositório.
+O Accessibility Lab foi desenvolvido como um projeto prático para explorar a integração entre:
+
+```text
+Front-end
++
+Acessibilidade
++
+Automação
++
+API
++
+Testes
++
+Segurança
++
+Análise de resultados
+```
+
+Mais do que apresentar uma interface de auditoria, o projeto demonstra uma abordagem de desenvolvimento baseada em **separação de responsabilidades, validação de entradas, testes automatizados, análise técnica e preocupação com acessibilidade desde a própria construção da aplicação**.
+
+---
+
+## Status
+
+**Projeto concluído e publicado.**
+
+Aplicação em produção:
+
+**<https://accessibility-lab-orcin.vercel.app>**
+
+Repositório:
+
+**<https://github.com/Manoelah20/accessibility-lab>**
