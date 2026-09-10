@@ -55,7 +55,14 @@ test.describe("API de auditoria", () => {
 
     expect(response.status()).toBe(200);
     expect(data.message).toBe("Auditoria concluída.");
+    expect(data.url).toBe("http://localhost:3000/test-page");
+    expect(data.title).toBe("Página de teste de acessibilidade | Accessibility Lab");
+    expect(Array.isArray(data.violations)).toBe(true);
+    expect(typeof data.passesCount).toBe("number");
+    expect(typeof data.incompleteCount).toBe("number");
+    expect(typeof data.inapplicableCount).toBe("number");
     expect(typeof data.score).toBe("number");
+    expect(typeof data.timestamp).toBe("string");
     expect(data.violations.length).toBeGreaterThan(0);
 
     const imageViolation = data.violations.find(
